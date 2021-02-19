@@ -195,7 +195,7 @@ datasaurus_dozen %>%
 What do you notice?  Is the correlation coefficiant an appropriate summary for any of these datasets?  Why or why not?
 
 > RESPONSE:
-
+The correlation coefficient is not an appropriate summary for these data sets because while their values are very similar across all datasets, the actual plot and distribution of the data is very different.
 
 *You should pause again, commit changes with the commit message "Added answer for Ex 5", and push.*
 
