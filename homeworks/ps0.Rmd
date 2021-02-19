@@ -3,9 +3,9 @@ title: 'STAT 231: Problem Set 0'
 author: "Kim Zhou"
 date: "due by 5 PM on Friday, February 19"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
-  pdf_document: default
 ---
 
 This problem set is a modified version of a lab developed by Mine Cetinkaya-Rundel.
@@ -67,7 +67,7 @@ Based on the help file, how many rows and how many columns does the `datasaurus_
 
 > RESPONSE:
 <<<<<<< HEAD
-There are 1846 rows and 3 variables. These variables are dataset, x-values, and y-values.
+There are 1846 rows and 3 columns for the variables. These variables are dataset, x-values, and y-values.
 =======
 There are 1846 rows and 3 variables. These variables are dataset, x, and y.
 >>>>>>> b3598b0ce3f98bd12af12267bababbb1db456778
