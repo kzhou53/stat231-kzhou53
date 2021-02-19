@@ -66,7 +66,11 @@ To find out more about the dataset, type the following in your Console: `?datasa
 Based on the help file, how many rows and how many columns does the `datasaurus_dozen` file have? What are the variables included in the data frame? After you've added your response below, commit your changes with the commit message "Added answer for Ex 1", and push.
 
 > RESPONSE:
+<<<<<<< HEAD
 There are 1846 rows and 3 variables. These variables are dataset, x-values, and y-values.
+=======
+There are 1846 rows and 3 variables. These variables are dataset, x, and y.
+>>>>>>> b3598b0ce3f98bd12af12267bababbb1db456778
 
 Let's take a look at what these datasets are. To do so we can make a *frequency table* of the dataset variable:
 
@@ -119,17 +123,23 @@ Calculate the correlation coefficient between `x` vs. `y` for the `star` dataset
 > RESPONSE: 
 
 ```{r}
+star_data <- datasaurus_dozen %>%
+  filter(dataset == "star")
 
+dino_data %>%
+  summarize(r = cor(x, y))
 ```
+The correlation coefficient for the star dataset between x and y is the same as the dino dataset correlation coefficient: -.064.
 
 Then, plot `y` versus `x` for the `star` dataset.  Does the plot look the same as the plot of the `dino` data?
 
 > RESPONSE:
 
 ```{r}
-
+ggplot(data = star_data, mapping = aes(x = x, y = y)) +
+  geom_point()
 ```
-
+This plot is different from the dino dataset plot. Instead of a dino, it forms a star shape.
 
 *This is another good place to pause, commit changes with the commit message "Added answer for Ex 3", and push.*
 
