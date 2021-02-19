@@ -126,10 +126,10 @@ Calculate the correlation coefficient between `x` vs. `y` for the `star` dataset
 star_data <- datasaurus_dozen %>%
   filter(dataset == "star")
 
-dino_data %>%
+star_data %>%
   summarize(r = cor(x, y))
 ```
-The correlation coefficient for the star dataset between x and y is the same as the dino dataset correlation coefficient: -.064.
+The correlation coefficient for the star dataset between x and y is almost the same as the dino dataset correlation coefficient with a vlue of -0.063.
 
 Then, plot `y` versus `x` for the `star` dataset.  Does the plot look the same as the plot of the `dino` data?
 
@@ -154,10 +154,10 @@ Calculate the correlation coefficient between `x` vs. `y` for the `circle` datas
 circle_data <- datasaurus_dozen %>%
   filter(dataset == "circle")
 
-dino_data %>%
+circle_data %>%
   summarize(r = cor(x, y))
 ```
-As with the previous two datasets, the correlation coefficient is the same for this data set.
+As with the previous two datasets, the correlation coefficient is almost the same for this data set with a value of -0.068.
 
 Then, plot `y` versus `x` for the `circle` dataset.  Does the plot look the same as either plot from the other two datasets?
 
