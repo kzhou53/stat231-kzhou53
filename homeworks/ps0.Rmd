@@ -151,17 +151,23 @@ Calculate the correlation coefficient between `x` vs. `y` for the `circle` datas
 > RESPONSE: 
 
 ```{r}
+circle_data <- datasaurus_dozen %>%
+  filter(dataset == "circle")
 
+dino_data %>%
+  summarize(r = cor(x, y))
 ```
+As with the previous two datasets, the correlation coefficient is the same for this data set.
 
 Then, plot `y` versus `x` for the `circle` dataset.  Does the plot look the same as either plot from the other two datasets?
 
 > RESPONSE:
 
 ```{r}
-
+ggplot(data = circle_data, mapping = aes(x = x, y = y)) +
+  geom_point()
 ```
-
+The plot is different again and is now a circle/oval shape.
 *You should pause again, commit changes with the commit message "Added answer for Ex 4", and push.*
 
 ## EXERCISE 5.
