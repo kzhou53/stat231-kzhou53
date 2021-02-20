@@ -149,6 +149,8 @@ name_plot <- ggplot(data = joseph, aes(x = year)) +
 name_plot
 ```
 
+I am not sure I uderstand the "make_babynames_dist()" function provided by the mdsr package. How do we know what variables and filters it adds? Was it preset specificlaly to 2014 or where in our code did we get that from and can we change it?
 
+In the "tribble()" function, I don't understand what the year, number of people, and label correspond to. For example, "the median living Joseph age is ..." label is not pointing to 2003. Are 2003, 40 the location for where the text will be centered on the plot?
 
 
