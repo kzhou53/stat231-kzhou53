@@ -126,7 +126,7 @@ ggplot(data = un_votes_hr
       lty = "Country"
     )
 ```
-Using teh exact smae process as the previous question but with lty instead of shape, we can give each country a different line type and clean up the legend.
+Using the exact same process as the previous question but with lty instead of shape, we can give each country a different line type and clean up the legend.
 *This is a good place to pause, commit changes with the commit message "Added answer for Ex 2", and push.*
 
 ### Exercise 3. Colors
@@ -147,9 +147,22 @@ Manual:
 - How to identify hex codes for more colors?  Check out: https://www.color-hex.com/.  Create one last figure with three colors of your choice assigned manually.
 
 ```{r, fig.width=10}
-
+ggplot(data = un_votes_hr
+       , mapping = aes(x = year, y = percent_yes, color = country)) +
+    geom_point(aes(shape = country)) +
+    geom_smooth(method = "loess", se = FALSE, aes(lty = country)) +
+    labs(
+      title = "Percentage of 'Yes' votes  on human rights issues in the UN General Assembly",
+      subtitle = "1946 to 2015",
+      y = "% Yes",
+      x = "Year",
+      color = "Country",
+      shape = "Country",
+      lty = "Country"
+    ) +
+  scale_color_manual(values = c("red", "yellow", "orange"))
 ```
-
+Adding the color brewer function by itself changes teh colors to shades of blue. 
 *This is a good place to pause, commit changes with the commit message "Added answer for Ex 3", and push.*
 
 
