@@ -74,8 +74,8 @@ Explain why the following command does not color the data points blue, then writ
 library(ggplot2)
 library(tidyverse)
 ggplot(data = mpg) + 
-  geom_point(mapping = aes(color = "blue", x = displ, y = hwy)) +
-  scale_color_manual(values = "blue")
+  geom_point(mapping = aes(x = displ, y = hwy), color = "blue") 
+
 ```
 
 
@@ -96,15 +96,15 @@ mlb_teams <- MLB_teams %>%
 
 
 ggplot(data = mlb_teams, aes(x= log_payroll, y= WPct)) + 
-  geom_point(aes(color = name)) +
+  geom_point() +
   labs(
     title = "The relationship between winning percent and payroll of MLB teams",
       y = "Winning Percent",
-      x = "log(Payroll)",
+      x = "log(Payroll) (in millions)",
       color = "Team Name") +
-  geom_smooth()
+  geom_smooth(color = "blue")
 ```
-The graphic I created demonstrates that there is a loose, direct correlation between the payroll and winning percentage. That is, the more a team pays its players, the larger their winning percentage is, ie, the more games they win (per season?).
+The graphic I created demonstrates that there is a weak, positive correlation between the payroll and winning percentage in the MLB. That is, a team with a higher payroll in the MLB, will generally have a higher winning percentage, ie, the more games they won/total games (per season).
 
 \newpage
 # MDSR Exercise 3.10 (modified)
@@ -114,8 +114,12 @@ Using data from the `nasaweather` package, use the `geom_path()` function to plo
 Note: be sure you load the `nasaweather` package and use the `storms` dataset from that package!
 
 ```{r}
-
-
+library(nasaweather)
+nasa_storm <- storms
+ggplot(data = nasa_storm) +
+  geom_path(aes(x = long, y = lat, color = name)) +
+  facet_wrap(~year) +
+  scale_color_discrete(guide="none")
 ```
 
 
