@@ -55,7 +55,7 @@ b. Can the data graphic be described in terms of the taxonomy presented in this 
 
 > ANSWER:
 
-This data graphic does have some of the visual cues listed in chapter 2. For example, color coordinates to whether the major is STEM, Humanities, or SOcial Sciences. Additionally, the area of the arc plays a role as double majors will have a two arcs, each with half thickness. The graphic doesn't appear to have a normal coordinate system and scale is hard to determine since there are no references/legends. What would be the coordinate system in this graphic is instead a circle of the different majors/career industries spread out around the circle. This and the lack of any scale to reference to is outside of our textbook taxonomy.
+This data graphic does have some of the visual cues listed in chapter 2. For example, color coordinates to whether the major is STEM, Humanities, or Social Sciences. Additionally, the area of the arc plays a role as double majors will have a two arcs, each with half thickness. The graphic doesn't appear to have a normal coordinate system and scale is hard to determine since there are no references/legends. What would be the coordinate system in this graphic is instead a circle of the different majors/career industries spread out around the circle. This is outside of our textbook taxonomy.
 
 c. Critique and/or praise the visualization choices made by the designer.  Do they work? Are they misleading?  Thought-provoking?  Brilliant?  Are there things that you would have done differently?  Justify your response.
 
