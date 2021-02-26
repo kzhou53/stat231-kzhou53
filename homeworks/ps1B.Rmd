@@ -37,7 +37,7 @@ knitr::opts_chunk$set(
 # If you discussed this assignment with any of your peers, please list who here:
 
 > ANSWER:
-
+Jamie Dailey
 
 
 \newpage
@@ -98,10 +98,10 @@ mlb_teams <- MLB_teams %>%
 ggplot(data = mlb_teams, aes(x= log_payroll, y= WPct)) + 
   geom_point() +
   labs(
-    title = "The relationship between winning percent and payroll of MLB teams",
-      y = "Winning Percent",
-      x = "log(Payroll) (in millions)",
-      color = "Team Name") +
+    title = "Relationship Between Winning Percent and Payroll of MLB Teams",
+      y = "Winning Percent (proportion)",
+      x = "log(Payroll) (in millions)"
+    ) +
   geom_smooth(color = "blue")
 ```
 The graphic I created demonstrates that there is a weak, positive correlation between the payroll and winning percentage in the MLB. That is, a team with a higher payroll in the MLB, will generally have a higher winning percentage, ie, the more games they won/total games (per season).
@@ -115,7 +115,8 @@ Note: be sure you load the `nasaweather` package and use the `storms` dataset fr
 
 ```{r}
 library(nasaweather)
-nasa_storm <- storms
+
+nasa_storm <- nasaweather::storms
 ggplot(data = nasa_storm) +
   geom_path(aes(x = long, y = lat, color = name)) +
   facet_wrap(~year) +
