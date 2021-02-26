@@ -115,6 +115,7 @@ Note: be sure you load the `nasaweather` package and use the `storms` dataset fr
 
 ```{r}
 
+
 ```
 
 
@@ -131,4 +132,9 @@ Note that you are not wed to the ideas you record here.  The visualizations and 
 
 > ANSWER:
 
+* I want to focus on are how much time  I spend listening to music and then compare that to how much time I spend in class. I also want to track how much time I actively work out and see how that compares to class and music.
+
+* I think the easiest way to depict this data would be in a bar graph with x-axis as "activity" and y axis as total time over 14 days in hours most likely. The different activities would be in different colors to provide distinction. Another visualization could be comparing the time I spend doing an activity on different days. In this case, I would have to average the hours--this might be more effective if done in minutes--per day over the 2-week period and then on the x-axis I would have day of the week and on the y-axis is average time. Then plot and connect points for each activity with activities in different colors for distinction. 
+
+* The table for the bar graph would have rows that are each activity and columns labeled as dates for the days of data collection. Then the inputs into the table will be time spent doing said activity, either in minutes or hours.
  
