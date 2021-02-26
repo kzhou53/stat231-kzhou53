@@ -72,8 +72,10 @@ Explain why the following command does not color the data points blue, then writ
 
 ```{r}
 library(ggplot2)
+library(tidyverse)
 ggplot(data = mpg) + 
-  geom_point(mapping = aes(x = displ, y = hwy, color = "blue"))
+  geom_point(mapping = aes(color = "blue", x = displ, y = hwy)) +
+  scale_color_manual(values = "blue")
 ```
 
 
@@ -85,9 +87,24 @@ Use the `MLB_teams` data in the `mdsr` package to create an informative data gra
 > ANSWER:
 
 ```{r}
+library(mdsr)
+mlb_teams <- MLB_teams %>%
+  mutate(
+    log_payroll = log(payroll)
+  ) %>%
+  select(name, log_payroll, WPct)
 
+
+ggplot(data = mlb_teams, aes(x= log_payroll, y= WPct)) + 
+  geom_point(aes(color = name)) +
+  labs(
+    title = "The relationship between winning percent and payroll of MLB teams",
+      y = "Winning Percent",
+      x = "log(Payroll)",
+      color = "Team Name") +
+  geom_smooth()
 ```
-
+The graphic I created demonstrates that there is a loose, direct correlation between the payroll and winning percentage. That is, the more a team pays its players, the larger their winning percentage is, ie, the more games they win (per season?).
 
 \newpage
 # MDSR Exercise 3.10 (modified)
