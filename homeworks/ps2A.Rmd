@@ -97,7 +97,7 @@ Working with the `babynames` data table in the `babynames` package, create a dat
 library(babynames)
 
 babynames2 <- babynames %>%
-  filter()
+  filter(year %in% 2000:2017)
 
 ```
 
@@ -107,8 +107,13 @@ Following the code presented in Section 5.2.4, create a dataset called `BabyNarr
 > ANSWER:
 
 ```{r}
+BabyNarrow <- babynames2 %>%
+  group_by(name, sex) %>%
+  summarize(total = sum(n))
 
+BabyNarrow
 ```
+We call this dataset narrow because our categorical variable sex is combined into one column and the total counts are for each name, not grouped by sex, so we don't have as many columns.
 
 ### c.
 Now, following the code chunk presented on page 103*, put the data into a wide format (call the new dataset `BabyWide`), and only keep observations where both `M` and `F` are greater than 10,000.  Compute the `ratio` (as `pmin(M/F, F/M`)) and identify the top three names with the largest ratio.  (Note: these names could be different from the ones found on page 103 since we limited the dataset to years 2000-2017 and names with greater than 10,000 individuals.)
@@ -118,10 +123,19 @@ Now, following the code chunk presented on page 103*, put the data into a wide f
 > ANSWER:
 
 ```{r}
-# this will bring up "Pivoting Introduction" vignette in your Help tab
-#vignette("pivot")
+BabyWide <- babynames2 %>%
+  group_by(sex, name) %>%
+  summarize(total = sum(n)) %>%
+  spread(key = sex, value = total, fill = 0)
+
+BabyWide %>%
+  filter(M > 10000, F > 10000) %>%
+  mutate(ratio = pmin(M/F, F/M)) %>%
+  arrange(desc(ratio)) %>%
+  head(3)
 
 ```
+The top three balanced gender neutral names between 2000-2017 are Justice, Skyler, and Quinn.
 
 ### d.
 Lastly, use the `gather()` function (or the `pivot_longer()` function) to put the dataset back into narrow form.  Call this dataset `BabyNarrow2`.  Hint: see Section 5.2.3.  Why are the number of observations in `BabyNarrow2` different from that in `BabyNarrow`?
@@ -129,7 +143,10 @@ Lastly, use the `gather()` function (or the `pivot_longer()` function) to put th
 > ANSWER: 
 
 ```{r}
-
+BabyNarrow2 <- BabyWide %>%
+  group_by(name) %>%
+  summarize(total = sum(n)) %>%
+  gather(key = sex, value = total, F, M)
 
 ```
 
