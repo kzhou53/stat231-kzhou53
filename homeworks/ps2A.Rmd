@@ -77,14 +77,10 @@ Getting NAs for `avg_arr_delay`?  That happens when some observations are missin
 
 ```{r}
 flights_joined2 %>%
-  mutate(
-    avg_arr_delay = mean(arr_delay),
-    avg_dist_km = mean(distance_km)
-  ) %>% 
   filter(is.na(arr_delay) == FALSE) %>%
   group_by(name) %>%
   summarize(
-    num_flights = n(), avg_arr_delay, avg_dist_km
+    num_flights = n(), avg_arr_delay = mean(arr_delay), avg_dist_km = mean(distance_km)
   ) %>% 
   arrange(desc(avg_arr_delay))
 
@@ -98,8 +94,10 @@ flights_joined2 %>%
 Working with the `babynames` data table in the `babynames` package, create a dataset `babynames2` that only includes years 2000 to 2017.
 
 ```{r}
+library(babynames)
 
-
+babynames2 <- babynames %>%
+  filter()
 
 ```
 
