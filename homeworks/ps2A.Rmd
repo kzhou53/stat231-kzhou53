@@ -126,14 +126,13 @@ Now, following the code chunk presented on page 103*, put the data into a wide f
 BabyWide <- babynames2 %>%
   group_by(sex, name) %>%
   summarize(total = sum(n)) %>%
-  spread(key = sex, value = total, fill = 0)
-
-BabyWide %>%
+  spread(key = sex, value = total, fill = 0) %>%
   filter(M > 10000, F > 10000) %>%
   mutate(ratio = pmin(M/F, F/M)) %>%
-  arrange(desc(ratio)) %>%
-  head(3)
+  arrange(desc(ratio)) 
 
+BabyWide%>%
+  head(3)
 ```
 The top three balanced gender neutral names between 2000-2017 are Justice, Skyler, and Quinn.
 
@@ -144,9 +143,8 @@ Lastly, use the `gather()` function (or the `pivot_longer()` function) to put th
 
 ```{r}
 BabyNarrow2 <- BabyWide %>%
-  group_by(name) %>%
-  summarize(total = sum(n)) %>%
   gather(key = sex, value = total, F, M)
 
+BabyNarrow2
 ```
-
+The number of observations in BabyNarrow2 is much fewer than the number in BabyNarrow because BabyNarrow is the entire babynames2 data set. In contrast, BabyNarrow2 is made from BabyWide, which we had filtered down to the names with more than 10000 males and 10000 females. So since BabyWide only had 25 observations, BabyNarrow2 has 50 observations.
