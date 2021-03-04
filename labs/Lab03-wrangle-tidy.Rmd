@@ -101,11 +101,15 @@ Using the View function in the console, we can see the entire data set for cover
 Note that there are observations both for the US as a whole and DC.  Remove these observations from both datasets.
 
 ```{r}
-coverage_cleaned2 <- coverage %>%
+coverage_cleaned <- coverage %>%
   filter(Location != "United States", Location != "District of Columbia")
 
-spending_cleaned2 <- spending %>%
+spending_cleaned <- spending %>%
   filter(Location != "United States", Location != "District of Columbia")
+
+healthcare_joined <- coverage_cleaned %>%
+  inner_join(spending_cleaned, by = c("Location" = "Location"))
+
 ```
 
 *This is a good place to pause, commit changes with the commit message "Added answer for Warm-up", and push.*
@@ -120,9 +124,13 @@ First, sketch the scatterplot (don't worry about the actual x-y relationship, bu
 
 > RESPONSE: 
 
+In order to create the scatterplot in ggplot we will to mutate the spending and employer coverage data so that they are in log form. We also need to create year as a variable since we are coloring according to this criteria. Each row in the dataset will represent a state and its corresponding data, but note that each state will have 2 rows: one for 2013 data and one for 2014 data.
+
 What are some of the steps that will need to be taken to get the data in that form?  
 
 > RESPONSE: 
+
+First we need to join together the two datasets, which we did in the warm-up. Then we should use the select function to select for the desired columns and we want to narrow the table so that data from different years is separated into different rows using the gather function. We will then need to mutate spending and employer coverage data by taking the logs of both. Additionally, in geom_point we will need to use the aes function to color by the variable year.
 
 *When you're done with the above responses, check that you're on the right track by viewing the video "Lab03-q1-sketch" (posted on Moodle).*
 
@@ -132,6 +140,11 @@ Now implement those steps in R, tidying the dataset for plotting.  After the fin
 
 
 ```{r}
+healthcare_joined %>%
+  select(Location, `2013__Employer`, `2013__Total`, `2014__Employer`, `2014__Total`) %>%
+  mutate(log_2013Emp = log('2013__Employer'))
+  gather(key = year, value = total, "2013__Total", "2014__Total") %>%
+  gather(key = year, value = employee, "2013__Employer", "2014__Employer")
 
 ```
 
