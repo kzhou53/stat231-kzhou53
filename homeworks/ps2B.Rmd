@@ -86,10 +86,27 @@ The player with the most accumulated strikeouts was ryanno01 with a total of 571
 
 a. The Violations data set in the `mdsr` package contains information regarding the outcome of health inspections in New York City.  Use these data to calculate the median violation score by zipcode and dba for zipcodes in Manhattan.  What pattern (if any) do you see between the number of inspections and the median score?  Generate a visualization to support your response.  
 
-> ANSWER:  
+> ANSWER: There does not appear to be a patter between the number of inspections and the median score. The majority of the data falls under 75 visits and under a median score of 45. 
 
 ```{r}
 library(mdsr)
+# calculate median score for each unique dba within a unique zipcode for all 
+# zipcodes in manhattan
+nyc_violations <- Violations %>%
+  filter(boro == "MANHATTAN") %>%
+  select(dba, zipcode, score, inspection_date)
+
+nyc_violations <- nyc_violations %>%
+  filter(is.na(score) == FALSE) %>%
+  group_by(dba, zipcode) %>%
+  summarise(median_score = median(score), num_visits = n())
+
+# plot number of inspections vs median score
+ggplot(data = nyc_violations, aes(x = num_visits, y = median_score)) +
+  geom_point() +
+  geom_smooth(method = "loess", se = FALSE)
+
+nyc_violations
 ```
 
 b.  In your visualization in part (a), there should be at least a few points that stand out as outliers.  For *one of the outliers*, add text to the outlier identifying what business it is and an arrow pointing from the text to the observation.  First, you may want to `filter` to identify the name of the business (so you know what text to add to the plot).  
@@ -97,8 +114,22 @@ b.  In your visualization in part (a), there should be at least a few points tha
 (Can't remember how to create a curved arrow in `ggplot`?  The answers to [this question](https://stackoverflow.com/questions/38008863/how-to-draw-a-nice-arrow-in-ggplot2/61383034) on Stack Exchange may help.  Can't remember how to add text to the plot in `ggplot`?  Check out the text examples with `annotate` [here](https://ggplot2.tidyverse.org/reference/annotate.html), or answers to [this question](https://stackoverflow.com/questions/14351608/color-one-point-and-add-an-annotation-in-ggplot2/14351810) that use `geom_text`.)
 
 ```{r}
+# highest median score is an outlier
+nyc_violations <- nyc_violations %>%
+  arrange(desc(median_score))
 
+nyc_violations
 
+ggplot(data = nyc_violations, aes(x = num_visits, y = median_score)) +
+  geom_point() +
+  geom_smooth(method = "loess", se = FALSE) +
+  geom_text(x = 50, y = 112, label = "ROXY DINER") +
+  geom_segment(aes(x = 38, y = 112, xend = 30, yend = 112),
+                  arrow = arrow(length = unit(0.4, "cm"))) +
+  labs(
+    x = "Number of Inspection Visits",
+    y = "Median Violation Score"
+  )
 ```
 
 
