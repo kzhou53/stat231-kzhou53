@@ -48,17 +48,3 @@ server <- function(input, output) {
 }
 
 shinyApp(ui = ui, server = server)
-
-
-
-#rv <- reactiveValues(
- # norm = rnorm(25), # wanted to do norm = rnorm(input$num) but didnt work
-  #unif = runif(25), # see above
-  #chisq = rchisq(25, 2)) # see above
-
-#observeEvent(input$renorm, { 
- # rv$norm <- rnorm(input$num) })
-#observeEvent(input$reunif, { 
-  #rv$unif <- runif(input$num) })
-#observeEvent(input$rechisq, { 
-  #rv$chisq <- rchisq(input$num, 2) })
