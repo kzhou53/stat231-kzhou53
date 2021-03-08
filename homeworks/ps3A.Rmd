@@ -1,6 +1,6 @@
 ---
 title: 'STAT 231: Problem Set 3A'
-author: "YOUR NAME HERE"
+author: "Kim Zhou"
 date: "due by 5 PM on Monday, March 8"
 output:
   pdf_document: default
@@ -73,7 +73,7 @@ The full code and slides from the video are also available here: https://github.
 ### a. 
 As you watch, or after watching, the tutorial, write down at least two questions you have about Shiny applications.
 
-> ANSWER:
+> ANSWER: Since rnorm gives us random values, how could we go about specifying an explicit set of numbers and then perhaps choosing randomly from that set. Also where does rnorm pull these numbers from? A second question is: why does our code to display summary statistics not need a reactive rv in server? 
 
 ### b.
 After watching the tutorial, create a new folder called "ps3a_shiny" within your "homeworks" folder in your GitHub repository.  Open a new R file (**not** R Markdown) by going to File > New File > R Script.  (In a .R file, you can only write R code.  Any comments need to have a hashtag (#) in front of them.)  Save the file as `app.R` within the "ps3a_shiny" folder.  Then,
