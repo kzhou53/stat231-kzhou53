@@ -142,7 +142,7 @@ Now implement those steps in R, tidying the dataset for plotting.  After the fin
 ```{r}
 healthcare_joined %>%
   select(Location, `2013__Employer`, `2013__Total`, `2014__Employer`, `2014__Total`) %>%
-  mutate(log_2013Emp = log('2013__Employer'))
+  mutate(log_2013Emp = log(`2013__Employer`), log_2014Emp = log(`2014__Employer`)) %>%
   gather(key = year, value = total, "2013__Total", "2014__Total") %>%
   gather(key = year, value = employee, "2013__Employer", "2014__Employer")
 

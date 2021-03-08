@@ -38,7 +38,7 @@ knitr::opts_chunk$set(
 
 # If you discussed this assignment with any of your peers, please list who here:
 
-> ANSWER:
+> ANSWER: Jamie Dailey
 
 \newpage
 # MDSR Exercise 4.14 (modified)
@@ -47,7 +47,7 @@ Use the `Pitching` data frame from the `Lahman` package to identify every pitche
 
 a. How many pitchers meet this criteria?  
 
-> ANSWER: 
+> ANSWER: There are 10 pitchers that have had more than 300 wins and 3000 strike outs over their career.
 
 ```{r}
 library(Lahman)
@@ -59,11 +59,10 @@ pitching_clean <- Pitching %>%
   
 pitching_clean
 ```
-There are 10 pitchers that have had more than 300 wins and 3000 strike outs over their career.
 
 b. Which of these pitchers had the most accumulated strikeouts?  How many strikeouts had he accumulated?  What is the most strikeouts he had in one season?
 
-> ANSWER: 
+> ANSWER: The player with the most accumulated strikeouts was Nolan Ryan with a total of 5714 strikeouts over his career. The most strikeouts he got in a season was 383 in 1973.
 
 ```{r}
 pitching_clean <- pitching_clean %>%
@@ -74,12 +73,13 @@ pitching_clean
 pitching_so <- Pitching %>%
   filter(playerID == "ryanno01") %>%
   select(playerID, yearID, SO) %>%
-  arrange(desc(SO))
+  arrange(desc(SO)) %>%
+  left_join(Master, by = c("playerID" = "playerID")) %>%
+  select(nameFirst, nameLast, yearID, SO)
 
 pitching_so
 ```
 
-The player with the most accumulated strikeouts was ryanno01 with a total of 5714 strikeouts over his career. The most strikeouts he got in a season was 383 in 1973.
 
 \newpage 
 # MDSR Exercise 4.17 (modified)
@@ -138,7 +138,6 @@ ggplot(data = nyc_violations, aes(x = num_visits, y = median_score)) +
 
 Generate the code to convert the data frame shown with this problem in the textbook (on page 130, and shown below) to wide format (i.e., the result table).  Hint: use `gather()` in conjunction with `spread()`; OR `pivot_longer()` in conjunction with `pivot_wider()`.
 
-![](images/mdsr_ex_5_7.jpg)
 
 ```{r}
 FakeDataLong <- data.frame(grp = c("A","A","B", "B")
@@ -148,16 +147,13 @@ FakeDataLong <- data.frame(grp = c("A","A","B", "B")
                            , meanR = c(0.34, 0.57, 0.40, 0.65)
                            , sdR = c(0.08, 0.33, 0.07, 0.27))
 
-FakeDataLong <- FakeDataLong %>%
-  group_by(grp, sex) %>%
-  summarise(mean_L = meanL, mean_R = meanR, sd_L = sdL, sd_R = sdR) %>%
-  gather(key = mean_LR, value = mean, mean_L, mean_R) %>%
-  gather(key = sd_LR, value = sd, sd_L, sd_R)
+FakeDataNarrow <- FakeDataLong %>%
+  gather(key = method, value = values, meanL, meanR, sdL, sdR) %>%
+  unite(sex_method, sex, method, sep = ".") %>%
+  spread(key = sex_method, value = values) 
 
-
-  #spread(key = sex, value = mean_L, fill = 0) 
-
-FakeDataLong
+  
+FakeDataNarrow
 ```
 
 \newpage

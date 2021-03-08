@@ -1,0 +1,31 @@
+---
+title: "calendar-assignment"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(ical)
+
+path <- "/Users/kimberlyzhou/git/stat231-kzhou53"
+filename <- "kzhou22@amhest.edu.ics"
+
+my_calendar0 <- ical_parse_df(file = paste0(path,"/",filename)) %>%
+  mutate(start_datetime = with_tz(start, tzone = "America/New_York")
+    , end_datetime = with_tz(end, tzone = "America/New_York")
+    , length_hour = end_datetime - start_datetime
+    , date = floor_date(start_datetime, unit = "day"))
+
+```
+

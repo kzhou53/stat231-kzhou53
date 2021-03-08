@@ -61,7 +61,7 @@ Hint: see examples in Section 4.1 for subsetting datasets and creating new varia
 ```{r}
 flights_joined2 <- flights_joined %>%
   mutate(
-    distance_km = 1.6*distance
+    distance_km = 1.6 * distance
   ) %>%
   select(name, flight, arr_delay, distance_km) %>%
   filter(distance_km < 500)
