@@ -44,8 +44,7 @@ name_choices
 ui <- fluidPage(
    
    # Application title
-   titlePanel("The Number of Babies with a Specified Name and Gender
-              between 1925 to 2000"),
+   titlePanel("The Number of Babies with a Specified Name and Gender"),
    
    # Sidebar with a slider input for number of bins 
    sidebarLayout(
