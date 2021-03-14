@@ -53,3 +53,15 @@ ggplot(data = my_cal_total,
   )
 ```
 
+```{r}
+# reate a line graph comparing hours spent doing each activity across 2 weeks
+ggplot(data = my_cal_total,
+       mapping = aes(x = date, y = total, color = activity)) +
+  geom_line() +
+  labs(
+    x = "Date",
+    y = "Hours spent",
+    color = "Activity"
+  )
+```
+
