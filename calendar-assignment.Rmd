@@ -28,7 +28,7 @@ my_calendar <- my_calendar0 %>%
   filter(date > "2021-02-23") %>%
   select(-c(uid, description, last.modified, status))
 
-# summarize total hours spent per day for each activity
+# summarize total hours spent per day for each activity into a table
 my_cal_total <- my_calendar %>%
   mutate(total_hrs = length_hour/3600) %>%
   rename(activity = summary) %>%
