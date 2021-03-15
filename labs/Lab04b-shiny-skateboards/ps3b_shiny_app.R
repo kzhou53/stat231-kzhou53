@@ -43,11 +43,11 @@ yr_choices <- unique(skateboards$year)
 ############
 #    ui    #
 ############
-ui <- navbarPage(
+ui <- fluidPage(
   # Change layout of existing app
   fluidPage(theme = shinytheme("yeti")),
   
-  title="Electric Skateboards",
+  titlePanel("Electric Skateboards"),
   
   navlistPanel("Visualizations of Data",           
     tabPanel(
