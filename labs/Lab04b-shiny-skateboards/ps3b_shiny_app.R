@@ -45,7 +45,7 @@ yr_choices <- unique(skateboards$year)
 ############
 ui <- fluidPage(
   # Change layout of existing app
-  fluidPage(theme = shinytheme("yeti")),
+  fluidPage(theme = shinytheme("sandstone")),
   
   titlePanel("Electric Skateboards"),
   
