@@ -1,6 +1,6 @@
 ---
 title: "STAT 231: Problem Set 5B"
-author: " "
+author: "Kim Zhou"
 date: "due by 10 PM on Friday, March 26"
 output:
   pdf_document: default
@@ -63,7 +63,7 @@ https://en.wikipedia.org/wiki/List_of_justices_of_the_Supreme_Court_of_the_Unite
 
 
 ```{r}
-
+paths_allowed("https://en.wikipedia.org/wiki/List_of_justices_of_the_Supreme_Court_of_the_United_States")
 
 ```
 
@@ -79,8 +79,16 @@ b. Go to the [List of Justices of the Supreme Court of the United States](https:
 ## evaluate it (which would re-scrape the website every time you knit this file).  
 ## (We do want the grader to be able to see the code, though, as you'll only 
 ## submit this one knit PDF to Gradescope.)
+justice_url <- "https://en.wikipedia.org/wiki/List_of_justices_of_the_Supreme_Court_of_the_United_States"
 
+justice_table <- justice_url %>%
+  read_html() %>% 
+  html_nodes("table")
+justice_table <- html_table(justice_table[[2]], fill = TRUE)
 
+write.csv(justice_table, 
+          "/Users/kimberlyzhou/git/stat231-kzhou53/homeworks/justices.csv", 
+          row.names = FALSE)
 ```
 
 
@@ -89,10 +97,10 @@ c. Load `justices.csv` into this file using the `read_csv` function.  Then, run 
 
 Create a visualization to show the distribution of tenure length of U.S. Supreme Court judges.  Interpret the plot.
 
-> ANSWER:   
+> ANSWER: Looking at the box plot, it appears that the tenure length is varies much more in the 1800 and 1900s and the medians are much higher during these times. Additionally, the median tenure length is shortes during the 1700s. The tenure length variation in the 1800 and 1900s is most likely due to the large amount of data available for both time periods compared to much fewer entries for the 1700s and 2000s. 
 
 ```{r}
-justices <- read_csv("INSERT YOUR PATH HERE/justices.csv")
+justices <- read_csv("/Users/kimberlyzhou/git/stat231-kzhou53/homeworks/justices.csv")
 
 justices2 <- justices %>%
   clean_names() %>%
@@ -113,7 +121,23 @@ justices2 <- justices %>%
            , sep = "\\(") %>%
   mutate(date_confirmed = lubridate::mdy(date_confirmed_vote))
 
+```
 
+```{r}
+justices_small <- justices2 %>%
+  select(justice_2, position, tenure_length, date_confirmed) %>%
+  mutate(date_conf = as.character(date_confirmed))
+
+# group justices by the year they were confirmed
+justices_year <- justices_small %>%
+  mutate(year = case_when(str_detect(date_conf, "^17") ~ "1700s", 
+                          str_detect(date_conf, "^18") ~ "1800s",
+                          str_detect(date_conf, "^19") ~ "1900s",
+                          str_detect(date_conf, "^20") ~ "2000s",
+                          TRUE ~ date_conf))
+
+ggplot(data = justices_year, mapping = aes(x = year, y = tenure_length)) +
+  geom_boxplot() 
 ```
 
 
@@ -123,7 +147,7 @@ justices2 <- justices %>%
 a. Confirm (using an R command) that automated scraping of the Brainy Quote webpage (https://www.brainyquote.com/) is allowed.
 
 ```{r}
-
+paths_allowed("https://www.brainyquote.com/")
 ```
 
 
