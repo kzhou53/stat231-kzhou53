@@ -13,3 +13,7 @@ quotes_dat <- data.frame(quote = quotes, stringsAsFactors = FALSE) %>%
   mutate(person = person
          , together = paste('"', as.character(quote), '" --'
                             , as.character(person), sep=""))
+
+write.csv(quotes_dat, 
+          "/Users/kimberlyzhou/git/stat231-kzhou53/homeworks/quotes.csv", 
+          row.names = FALSE)
