@@ -137,7 +137,11 @@ justices_year <- justices_small %>%
                           TRUE ~ date_conf))
 
 ggplot(data = justices_year, mapping = aes(x = year, y = tenure_length)) +
-  geom_boxplot() 
+  geom_boxplot() +
+  labs(
+    x = "Year Range",
+    y = "Tenure Length"
+  )
 ```
 
 
@@ -199,8 +203,29 @@ Go to BrainyQuote.com and search a different topic (or search an Author) that in
 ## evaluate it (which would re-scrape the website every time you knit this file).  
 ## (We do want the grader to be able to see the code, though, as you'll only 
 ## submit this one knit PDF to Gradescope.)
+alone_quotes <- read_html("https://www.brainyquote.com/topics/alone-quotes")
 
+quote <- alone_quotes %>%
+  html_nodes(".oncl_q") %>%
+  html_text()
 
+person <- quotes_html %>%
+  html_nodes(".oncl_a") %>%
+  html_text()
+
+quotes_dat <- data.frame(quote = quotes, stringsAsFactors = FALSE) %>%
+  filter(quote != "\n") %>%
+  mutate(person = person
+         , together = paste('"', as.character(quote), '" --'
+                          , as.character(person), sep=""))
+```
+
+```{r}
+quotes_dat <- read_csv("http://kcorreia.people.amherst.edu/S2021/resilience_quotes.csv")
+
+quote_for_the_day <- quotes_dat[sample(1:nrow(quotes_dat), size = 1),]
+
+cat(quote_for_the_day$together)
 ```
 
 
