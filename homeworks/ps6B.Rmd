@@ -107,8 +107,27 @@ tweets2 <- tweets %>%
 > ANSWER:  
 
 ```{r, fig.width=8, fig.height=8}
+tweet_words <- tweets2 %>%
+  unnest_tokens(output = word, input = text) %>%
+  select(source, word)
 
+to_remove <- c("t.co", "https")
+`%notin%` <- negate(`%in%`)
 
+tweet_words2 <- tweet_words %>%
+  anti_join(stop_words, by = "word") %>%
+  filter(word %notin% to_remove)
+
+tweet_words2 %>%
+  count(word, sort = TRUE) %>% 
+  slice(1:50) %>%
+  ggplot(aes(x = reorder(word,n), y = n, color = word, fill=word)) +
+  geom_col() +
+  xlab(NULL) +
+  coord_flip() +
+  labs(y = "Number of instances"
+       , title="The most common words in Emily Dickinson's poems") +
+  guides(color = "none", fill = "none")
 ```
 
 \newpage
