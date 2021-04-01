@@ -163,7 +163,7 @@ tweet_bigrams %>%
 \newpage
 2c. Consider the sentiment.  Compute the proportion of words among the tweets within each source classified as "angry" and the proportion of words classified as "joy"  based on the NRC lexicon.  How does the proportion of "angry" and "joy" words compare between the two sources?  What about "positive" and "negative" words?  
 
-> ANSWER: 
+> ANSWER: The proportion of words with angry sentiment is higher from both sources than the proportion with joyful sentiment, but not by a large amount. Compared to the proportion of angry and joyful words, there are higher proportions of negative and positive words across both sources. The proportion of positive words from both sources is slightly higher than the proportion of negative words, but similar to the pattern in the first analysis, not higher by much. 
 
 ```{r}
 nrc_lexicon <- get_sentiments("nrc")
@@ -192,6 +192,34 @@ prop_sentiment <- data.frame(
          prop_iphone_joy = (numiphone_joy/iphone_tot),
          prop_andr_anger = (numandr_anger/andr_tot),
          prop_andr_joy = (numandr_joy/andr_tot)
+         )
+```
+
+```{r}
+iphone_sentiment <- inner_join(iphone_word, nrc_lexicon, by = "word")
+iphone_tot <- nrow(iphone_word)
+numiphone_pos <- length(iphone_sentiment$sentiment[iphone_sentiment$sentiment 
+                                                     == "positive"])
+numiphone_neg <- length(iphone_sentiment$sentiment[iphone_sentiment$sentiment 
+                                                   == "negative"])
+
+android_sentiment <- inner_join(android_word, nrc_lexicon, by = "word")
+andr_tot <- nrow(android_word)
+numandr_pos <- length(android_sentiment$sentiment[android_sentiment$sentiment 
+                                                       == "positive"])
+numandr_neg <- length(android_sentiment$sentiment[android_sentiment$sentiment 
+                                                  == "negative"])
+prop_sentiment2 <- data.frame(
+  numiphone_pos,
+  numiphone_neg,
+  iphone_tot,
+  numandr_pos,
+  numandr_neg,
+  andr_tot) %>%
+  mutate(prop_iphone_pos = (numiphone_pos/iphone_tot),
+         prop_iphone_neg = (numiphone_neg/iphone_tot),
+         prop_andr_pos = (numandr_pos/andr_tot),
+         prop_andr_neg = (numandr_neg/andr_tot)
          )
 ```
 
