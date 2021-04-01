@@ -104,7 +104,7 @@ tweets2 <- tweets %>%
 
 *Don't forget to remove stop words before creating the word cloud.  Also remove the terms "https" and "t.co".*
 
-> ANSWER:  
+> ANSWER: The most common words sent from iPhone compared to Android differed, but overall, the top 50 words sent from either source are similar, so words like hillary, crooked, makeamericagreatagain appear in both, but from android crooked and hillary are some of the top sent. However, from the iPhone, maga and trump2016 are. 
 
 ```{r, fig.width=8, fig.height=8}
 tweet_words <- tweets2 %>%
@@ -116,18 +116,21 @@ to_remove <- c("t.co", "https")
 
 tweet_words2 <- tweet_words %>%
   anti_join(stop_words, by = "word") %>%
-  filter(word %notin% to_remove)
+  filter(word %notin% to_remove) %>%
+  group_by(source) %>%
+  count(word, sort = TRUE)
 
-tweet_words2 %>%
-  count(word, sort = TRUE) %>% 
-  slice(1:50) %>%
-  ggplot(aes(x = reorder(word,n), y = n, color = word, fill=word)) +
-  geom_col() +
-  xlab(NULL) +
-  coord_flip() +
-  labs(y = "Number of instances"
-       , title="The most common words in Emily Dickinson's poems") +
-  guides(color = "none", fill = "none")
+iphone_word <- tweet_words2 %>%
+  filter(source == "iPhone")
+
+wordcloud(words = iphone_word$word
+          , freq = iphone_word$n, max.words=50)
+
+android_word <- tweet_words2 %>%
+  filter(source == "Android") 
+
+wordcloud(words = android_word$word
+          , freq = android_word$n, max.words=50)
 ```
 
 \newpage
@@ -138,7 +141,22 @@ How do the top used bigrams compare between the two sources?
 > ANSWER:  
 
 ```{r}
+tweet_bigrams <- tweets2 %>%
+  unnest_tokens(output = bigram, input = text
+                , token = "ngrams", n = 2) %>%
+  select(source, bigram)
 
+tweet_bigrams %>%
+  count(bigram, sort = TRUE) %>% 
+  slice(1:10) %>%
+  ggplot(aes(x = reorder(bigram, n), y = n, color = bigram, fill = bigram)) +
+  geom_col() +
+  #facet_wrap(~source) +
+  xlab(NULL) +
+  coord_flip() +
+  labs(y = "Number of instances"
+       , title="The most common bigrams in Trump's tweets by source") +
+  guides(color = "none", fill = "none") 
 ```
 
 
@@ -148,8 +166,33 @@ How do the top used bigrams compare between the two sources?
 > ANSWER: 
 
 ```{r}
+nrc_lexicon <- get_sentiments("nrc")
 
+iphone_sentiment <- inner_join(iphone_word, nrc_lexicon, by = "word")
+iphone_tot <- nrow(iphone_word)
+numiphone_anger <- length(iphone_sentiment$sentiment[iphone_sentiment$sentiment 
+                                                     == "anger"])
+numiphone_joy <- length(iphone_sentiment$sentiment[iphone_sentiment$sentiment 
+                                                   == "joy"])
 
+android_sentiment <- inner_join(android_word, nrc_lexicon, by = "word")
+andr_tot <- nrow(android_word)
+numandr_anger <- length(android_sentiment$sentiment[android_sentiment$sentiment 
+                                                       == "anger"])
+numandr_joy <- length(android_sentiment$sentiment[android_sentiment$sentiment 
+                                                  == "joy"])
+prop_sentiment <- data.frame(
+  numiphone_anger,
+  numiphone_joy,
+  iphone_tot,
+  numandr_anger,
+  numandr_joy,
+  andr_tot) %>%
+  mutate(prop_iphone_anger = (numiphone_anger/iphone_tot),
+         prop_iphone_joy = (numiphone_joy/iphone_tot),
+         prop_andr_anger = (numandr_anger/andr_tot),
+         prop_andr_joy = (numandr_joy/andr_tot)
+         )
 ```
 
 
