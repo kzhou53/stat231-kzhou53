@@ -138,94 +138,62 @@ wordcloud(words = android_word$word
 
 How do the top used bigrams compare between the two sources?
 
-> ANSWER:  
+> ANSWER: Both crooked hillary and hillary clinton are part of the top common bigrams, but there is more varaition between the bigrams from different sources. It appears that bigrams involving competitor names are more common in the Android set and slogans are more common in iPhone.
 
 ```{r}
 tweet_bigrams <- tweets2 %>%
   unnest_tokens(output = bigram, input = text
                 , token = "ngrams", n = 2) %>%
-  select(source, bigram)
+  separate(bigram, c("word1", "word2"), sep = " ") %>% 
+  filter(!word1 %in% stop_words$word) %>%
+  filter(!word2 %in% stop_words$word) %>% 
+  filter(word1 %notin% to_remove) %>%
+  filter(word2 %notin% to_remove) %>%
+  unite(word,word1, word2, sep = " ") %>% 
+  count(word, source, sort = TRUE) %>%
+  rename(bigram = word)
 
 tweet_bigrams %>%
-  count(bigram, sort = TRUE) %>% 
+  group_by(source) %>%
   slice(1:10) %>%
   ggplot(aes(x = reorder(bigram, n), y = n, color = bigram, fill = bigram)) +
   geom_col() +
-  #facet_wrap(~source) +
+  facet_wrap(~source) +
   xlab(NULL) +
   coord_flip() +
   labs(y = "Number of instances"
-       , title="The most common bigrams in Trump's tweets by source") +
+       , title="The most common bigrams in Trump's tweets from Android") +
   guides(color = "none", fill = "none") 
+
 ```
 
 
 \newpage
 2c. Consider the sentiment.  Compute the proportion of words among the tweets within each source classified as "angry" and the proportion of words classified as "joy"  based on the NRC lexicon.  How does the proportion of "angry" and "joy" words compare between the two sources?  What about "positive" and "negative" words?  
 
-> ANSWER: The proportion of words with angry sentiment is higher from both sources than the proportion with joyful sentiment, but not by a large amount. Compared to the proportion of angry and joyful words, there are higher proportions of negative and positive words across both sources. The proportion of positive words from both sources is slightly higher than the proportion of negative words, but similar to the pattern in the first analysis, not higher by much. 
+> ANSWER: 4.3% of words from Android were angry while 3.1% were joyful. This is compared to 3.8% of words that are angry and 2.7% that are joyful form the iPhone. Somewhat different from the positive and negative sentiments where 9.3% were negative and 9.7% were positve from the Android, but only 6.8% were negative and 7.7% were positive from the iPhone.  
 
 ```{r}
 nrc_lexicon <- get_sentiments("nrc")
 
-iphone_sentiment <- inner_join(iphone_word, nrc_lexicon, by = "word")
-iphone_tot <- nrow(iphone_word)
-numiphone_anger <- length(iphone_sentiment$sentiment[iphone_sentiment$sentiment 
-                                                     == "anger"])
-numiphone_joy <- length(iphone_sentiment$sentiment[iphone_sentiment$sentiment 
-                                                   == "joy"])
+tweet_sentiment <- tweet_words2 %>%
+  inner_join(nrc_lexicon, by = "word") %>%
+  filter(sentiment %in% c("anger", "joy", "positive", "negative"))
 
-android_sentiment <- inner_join(android_word, nrc_lexicon, by = "word")
-andr_tot <- nrow(android_word)
-numandr_anger <- length(android_sentiment$sentiment[android_sentiment$sentiment 
-                                                       == "anger"])
-numandr_joy <- length(android_sentiment$sentiment[android_sentiment$sentiment 
-                                                  == "joy"])
-prop_sentiment <- data.frame(
-  numiphone_anger,
-  numiphone_joy,
-  iphone_tot,
-  numandr_anger,
-  numandr_joy,
-  andr_tot) %>%
-  mutate(prop_iphone_anger = (numiphone_anger/iphone_tot),
-         prop_iphone_joy = (numiphone_joy/iphone_tot),
-         prop_andr_anger = (numandr_anger/andr_tot),
-         prop_andr_joy = (numandr_joy/andr_tot)
-         )
+num_words <- tweet_words2 %>%
+  group_by(source) %>%
+  summarise(total = n())
+
+prop_sentiment <- tweet_sentiment %>%
+  group_by(source, sentiment) %>% 
+  summarise(tot_sent = n()) %>%
+  inner_join(num_words, by = "source") %>%
+  mutate(proportion = tot_sent/total)
+  
 ```
-
-```{r}
-iphone_sentiment <- inner_join(iphone_word, nrc_lexicon, by = "word")
-iphone_tot <- nrow(iphone_word)
-numiphone_pos <- length(iphone_sentiment$sentiment[iphone_sentiment$sentiment 
-                                                     == "positive"])
-numiphone_neg <- length(iphone_sentiment$sentiment[iphone_sentiment$sentiment 
-                                                   == "negative"])
-
-android_sentiment <- inner_join(android_word, nrc_lexicon, by = "word")
-andr_tot <- nrow(android_word)
-numandr_pos <- length(android_sentiment$sentiment[android_sentiment$sentiment 
-                                                       == "positive"])
-numandr_neg <- length(android_sentiment$sentiment[android_sentiment$sentiment 
-                                                  == "negative"])
-prop_sentiment2 <- data.frame(
-  numiphone_pos,
-  numiphone_neg,
-  iphone_tot,
-  numandr_pos,
-  numandr_neg,
-  andr_tot) %>%
-  mutate(prop_iphone_pos = (numiphone_pos/iphone_tot),
-         prop_iphone_neg = (numiphone_neg/iphone_tot),
-         prop_andr_pos = (numandr_pos/andr_tot),
-         prop_andr_neg = (numandr_neg/andr_tot)
-         )
-```
-
 
 \newpage
 2d. Lastly, based on your responses above, do you think there is evidence to support Robinson's claim that Trump only writes the (angrier) Android half of the tweets from realDonaldTrump?  In 2-4 sentences, please explain.
 
-> ANSWER: 
+> ANSWER: It does not appear that Trump only writes angrier tweets from the Android. The proportion of words that were angry and sent from the Android is only slightly more thatn the proportion that were angry from the iPhone (4.3% compared to 3.8%). This does not appear to be a significant enough of a difference to support Robinson's claim, but a test may still conclude otherwise. 
 
