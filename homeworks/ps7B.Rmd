@@ -111,37 +111,46 @@ strength(migflow, weights = E(migflow)$sY2000
 
 1c. Among these same countries, identify the top 5 countries *of origin* and *of destination* (separately) in 1980 using (weighted) degree centrality.  Interpret this information.
 
-> ANSWER:
+> ANSWER: Top countries of destination- Korea, Great Britan, India, Japan, USA. Top countries of origin- USA, Japan, Argentina, Great Britan, Brazil.
 
 ```{r}
+strength(migflow, weights = E(migflow)$sY1980
+         , mode = "in")
 
+strength(migflow, weights = E(migflow)$sY1980
+         , mode = "out")
 ```
 
 
-1d. Among these same countries, idenitify the top 5 countries *of origin* and *of destination* (separately) in 2000 using (weighted) degree centrality.  Interpret this information.
+1d. Among these same countries, identify the top 5 countries *of origin* and *of destination* (separately) in 2000 using (weighted) degree centrality.  Interpret this information.
 
-> ANSWER: 
+> ANSWER: Top countries of destination- Great Britan, Korea, Japan, India, USA. Top countries of origin- USA, Japan, Great Britan, Brazil, Argentina.
 
 ```{r}
+strength(migflow, weights = E(migflow)$sY2000
+         , mode = "in")
 
+strength(migflow, weights = E(migflow)$sY2000
+         , mode = "out")
 ```
 
 
 1e. What is the diameter of this network in 2000? In 1-2 sentences, interpret this value.
 
-> ANSWER:  
+> ANSWER:  The diameter is 2 which means it would take at most 2 connections to get between the two least connected countries.
 
 ```{r}
-
+diameter(migflow, directed = TRUE)
 ```
 
 
 1f. What is the density of this network in 2000? In 1-2 sentences, interpret this value.
 
-> ANSWER: 
+> ANSWER: V(V-1) = 56. So density = 45/56 = 0.804. This means that a large portion of the possible connections between countries are achieved, ie, most of the possible combinations of migration between these countries occur.
 
 ```{r}
-
+vcount(migflow)
+ecount(migflow)
 ```
 
 
