@@ -161,10 +161,47 @@ Reproduce the map you created for Lab08-spatial (and finish it if you didn't in 
 
 NOTE: you do NOT need to say what colors are representing what feature (e.g, NOT:  "In this map, I've colored the countries by GDP, with green representing low values and red representing high values") -- this is obvious to the viewer, assuming there's an appropriate legend and title.  Rather, what *information* do you extract from the visualization? (e.g., "From the choropleth below, we can see that the percent change in GDP per capita  between 1957-2007 varies greatly across countries in Central America.  In particular, Panama and Costa Rica stand out as having GDPs per capita that increased by over 200% across those 50 years.  In contrast, Nicaragua's GDP per capita decreased by a small percentage during that same time span.")
 
-> ANSWER:  
+> ANSWER:  From the visualizations below, we can see a slight correlation between the share of the population that is non-white and the number of hate crimes per 100k people. Specifically, states in the North East and along the south of the US have larger proportions of non-white people and we see that the number of hate crimes per 100k people is also greater in these states. This is consistent with our general understanding and perception of hate crimes since a lot of hate crimes are based on racism and these states have larger populations of those that hate crimes are targetted towards. Additionally, we know that the the south and north east, as well as CA often have more diverse populations compared to the midwest, which is also represented by and consistent with our visualization. 
 
 ```{r}
+library(fivethirtyeight)
+hate_crimes <- fivethirtyeight::hate_crimes
+data(state)
+state_info <- data.frame(state_full = tolower(state.name)
+                         , State = state.abb
+                         , Region = state.region)
+usa_states <- map_data(map = "state"
+                       , region = ".")
 
+#add state names to hate crimes data
+state_geo <- usa_states %>%
+  left_join(state_info, by = c("region" = "state_full"))
+
+hate_clean <- hate_crimes %>%
+  select(state, state_abbrev, share_non_white, hate_crimes_per_100k_splc)
+
+hate_all <- hate_clean %>%
+  left_join(state_geo, by = c("state_abbrev" = "State"))
+
+#plot hate crimes
+ggplot(hate_all, mapping = aes(x = long, y = lat, group = group)) +
+  geom_polygon(hate_all, mapping = aes(x = long, y = lat
+                                     , fill = hate_crimes_per_100k_splc)) +
+  theme_void() +
+  coord_fixed(ratio = 1.3) +
+  labs(fill = "Average Hate Crimes per 100k People",
+       title = "Hate Crimes by State") +
+  scale_fill_gradient(low="#56B1F7", high="#132B43")
+
+#plot non-white prop of population
+ggplot(hate_all, mapping = aes(x = long, y = lat, group = group)) +
+  geom_polygon(hate_all, mapping = aes(x = long, y = lat
+                                     , fill = share_non_white)) +
+  theme_void() +
+  coord_fixed(ratio = 1.3) +
+  labs(fill = "Share of Population who are Non-white",
+       title = "Proportion of Population that are Non-white by State") +
+  scale_fill_gradient(low="#56B1F7", high="#132B43") 
 ```
 
 \newpage
@@ -179,8 +216,39 @@ Describe one challenge you encountered (if any) while creating this map.
 > ANSWER: 
 
 ```{r}
+county_employment <- readxl::read_excel(paste0(path_in, "/Unemployment.xls")
+                                       , sheet = 1
+                                       , skip = 7) %>%
+  janitor::clean_names()
 
+va_counties <- map_data(map = "county"
+                      , region = "virginia")
+#clean county employment data
+county_clean <- county_employment %>%
+  filter(stabr == "VA") %>%
+  filter(area_name != "Virginia") %>%
+  dplyr::select(area_name, starts_with("unemployment_rate"))
+  
+county_clean$area_name <- gsub(" .*", "", county_clean$area_name)
 
+county_avg <- county_clean %>%
+  pivot_longer(!area_name, names_to = "unemp_year", values_to = "unemp_rate") %>%
+  group_by(area_name) %>%
+  summarise(unemp_avg = mean(unemp_rate)) %>%
+  mutate(area_name = tolower(area_name))
+
+county_geo <- va_counties %>%
+  left_join(county_avg, by = c("subregion" = "area_name"))
+
+ggplot(county_geo, mapping = aes(x = long, y = lat, group = group)) +
+  geom_polygon(county_geo, mapping = aes(x = long, y = lat
+                                     , fill = unemp_avg)) +
+  theme_void() +
+  coord_fixed(ratio = 1.3) +
+  labs(fill = "Average Unemployment Rate",
+       title = "Average Unemployment Rate in Virginia from 2000-2019") +
+  scale_fill_gradient(low="#56B1F7", high="#132B43") +
+  scale_fill_viridis(option = "magma", direction = -1)
 ```
 
 
