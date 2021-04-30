@@ -294,7 +294,7 @@ is.connected(got_connect)
 ```
 
 
-4.  Use the code below to compute the diameter of the network.  Intepret the value.
+4.  Use the code below to compute the diameter of the network.  Interpret the value.
 
 > ANSWER:  The diameter of the network is 6. It would take at most 6 connections to get between the two least connected characters.
 
